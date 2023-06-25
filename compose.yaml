@@ -30,7 +30,7 @@ services:
     volumes:
       - ./data/prometheus/config:/etc/prometheus/
     command:
-      - '--config.file=prometheus.yaml'
+      - '--config.file=/etc/prometheus/prometheus.yaml'
 
   grafana:
     image: grafana/grafana-oss:8.5.2
