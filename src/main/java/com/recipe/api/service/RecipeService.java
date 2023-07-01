@@ -85,14 +85,14 @@ public class RecipeService {
         id,
         recipeDto.getName(),
         recipeDto.getInstruction(),
-        recipeDto.getType(),
+        recipeDto.getVariant(),
         recipeDto.getServingCount());
     Optional<Recipe> recipe = recipeRepository.findById(id);
     if (recipe.isPresent()) {
       recipe.get().setInstruction(recipeDto.getInstruction());
       recipe.get().setName(recipeDto.getName());
       recipe.get().setServingCount(recipeDto.getServingCount());
-      recipe.get().setType(recipeDto.getType());
+      recipe.get().setVariant(recipeDto.getVariant());
 
       Recipe updatedRecipe = recipeRepository.save(recipe.get());
       return recipeMapper.recipeEntityToDto(updatedRecipe);

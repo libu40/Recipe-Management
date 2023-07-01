@@ -13,12 +13,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Set;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /** This class is an database entity responsible for holding ingredient information. */
@@ -27,6 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "ingredient")
 @EntityListeners(AuditingEntityListener.class)
 public class Ingredient implements Serializable {
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -36,12 +35,6 @@ public class Ingredient implements Serializable {
   @NotBlank
   @Column(nullable = false, unique = true)
   private String name;
-
-  @Column(updatable = false)
-  @CreationTimestamp
-  private LocalDateTime createdAt;
-
-  @Column @UpdateTimestamp private LocalDateTime updatedAt;
 
   @ManyToMany(
       fetch = FetchType.LAZY,
@@ -69,22 +62,6 @@ public class Ingredient implements Serializable {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
   }
 
   public Set<Recipe> getRecipes() {

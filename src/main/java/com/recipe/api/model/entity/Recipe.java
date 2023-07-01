@@ -18,11 +18,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Set;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /** This class is an database entity responsible for holding recipe information. */
@@ -46,15 +43,9 @@ public class Recipe implements Serializable {
 
   @NotBlank
   @Column(nullable = false)
-  private RecipeType type;
+  private RecipeType variant;
 
   @Column private Integer servingCount;
-
-  @Column(updatable = false)
-  @CreationTimestamp
-  private LocalDateTime createdAt;
-
-  @Column @UpdateTimestamp private LocalDateTime updatedAt;
 
   @ManyToMany(
       fetch = FetchType.LAZY,
@@ -69,12 +60,12 @@ public class Recipe implements Serializable {
   public Recipe(
       String name,
       String instruction,
-      RecipeType type,
+      RecipeType variant,
       Integer servingCount,
       Set<Ingredient> ingredients) {
     this.name = name;
     this.instruction = instruction;
-    this.type = type;
+    this.variant = variant;
     this.servingCount = servingCount;
     this.ingredients = ingredients;
   }
@@ -103,12 +94,12 @@ public class Recipe implements Serializable {
     this.instruction = instruction;
   }
 
-  public RecipeType getType() {
-    return type;
+  public RecipeType getVariant() {
+    return variant;
   }
 
-  public void setType(RecipeType type) {
-    this.type = type;
+  public void setVariant(RecipeType variant) {
+    this.variant = variant;
   }
 
   public Integer getServingCount() {
@@ -117,22 +108,6 @@ public class Recipe implements Serializable {
 
   public void setServingCount(Integer servingCount) {
     this.servingCount = servingCount;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
   }
 
   public Set<Ingredient> getIngredients() {

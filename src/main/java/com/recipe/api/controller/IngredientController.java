@@ -52,7 +52,7 @@ public class IngredientController {
         @ApiResponse(code = 500, message = "Application Server Error!"),
         @ApiResponse(code = 404, message = "Ingredient not found for the given Id!")
       })
-  @GetMapping(value = "/ingredient/{id}", produces = MediaType.APPLICATION_JSON)
+  @GetMapping(value = "/ingredients/{id}", produces = MediaType.APPLICATION_JSON)
   public ResponseEntity<IngredientDto> getIngredientById(
       @ApiParam(value = "Ingredient Id", required = true) @PathVariable int id) {
     LOGGER.info("fetch ingredient for the id: {}", id);
@@ -97,7 +97,7 @@ public class IngredientController {
         @ApiResponse(code = 404, message = "No Ingredients found!"),
         @ApiResponse(code = 400, message = "Bad request"),
       })
-  @GetMapping(value = "/ingredients", produces = MediaType.APPLICATION_JSON)
+  @GetMapping(value = "/ingredients/page", produces = MediaType.APPLICATION_JSON)
   public ResponseEntity<List<IngredientDto>> getIngredientList(
       @RequestParam(defaultValue = "0") Integer pageNo,
       @RequestParam(defaultValue = "10") Integer pageSize,
