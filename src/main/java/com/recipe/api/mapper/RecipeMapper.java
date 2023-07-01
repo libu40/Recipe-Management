@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring")
 public interface RecipeMapper {
 
-  RecipeDto recipeEntityToDto(Recipe recipe);
+    RecipeDto recipeEntityToDto(Recipe recipe);
 
-  Recipe recipeDtoToEntity(RecipeDto recipeDto);
+    Recipe recipeDtoToEntity(RecipeDto recipeDto);
 }
