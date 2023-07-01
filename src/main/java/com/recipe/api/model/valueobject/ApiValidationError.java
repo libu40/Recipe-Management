@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * This class holds the validation errors for the fields.
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor

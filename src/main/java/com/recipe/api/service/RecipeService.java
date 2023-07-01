@@ -4,8 +4,11 @@ import com.recipe.api.exception.EntityNotFoundException;
 import com.recipe.api.mapper.RecipeMapper;
 import com.recipe.api.model.dto.RecipeDto;
 import com.recipe.api.model.entity.Recipe;
+import com.recipe.api.model.valueobject.SearchCriteria;
 import com.recipe.api.model.valueobject.SearchRequest;
 import com.recipe.api.repository.RecipeRepository;
+import com.recipe.api.search.SearchSpecificationBuilder;
+import jakarta.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +17,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,6 +113,39 @@ public class RecipeService {
 
   public List<RecipeDto> searchRecipe(
       SearchRequest searchRequest, Integer pageNo, Integer pageSize, String sortBy) {
-    return null;
+    List<SearchCriteria> searchCriterionRequests = new ArrayList<>();
+    SearchSpecificationBuilder builder = new SearchSpecificationBuilder(searchCriterionRequests);
+    Pageable pageRequest = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+    Specification<Recipe> recipeSpecification = createRecipeSpecification(searchRequest, builder);
+    Page<Recipe> filteredRecipes = recipeRepository.findAll(recipeSpecification, pageRequest);
+
+    return filteredRecipes.toList().stream().map(recipeMapper::recipeEntityToDto).toList();
+  }
+
+  private Specification<Recipe> createRecipeSpecification(
+      SearchRequest recipeSearchRequest, SearchSpecificationBuilder builder) {
+    List<SearchCriteria> searchCriteriaRequests = recipeSearchRequest.getSearchCriteria();
+
+    if (Optional.ofNullable(searchCriteriaRequests).isPresent()) {
+      List<SearchCriteria> searchCriteriaList =
+          searchCriteriaRequests.stream()
+              .map(
+                  searchCriteria ->
+                      new SearchCriteria(
+                          searchCriteria.getKey(),
+                          searchCriteria.getOperation(),
+                          searchCriteria.getValue(),
+                          searchCriteria.getDataOption()))
+              .toList();
+
+      if (!searchCriteriaList.isEmpty())
+        searchCriteriaList.forEach(
+            criteria -> {
+              criteria.setDataOption(recipeSearchRequest.getDataOption());
+              builder.with(criteria);
+            });
+    }
+
+    return builder.build().orElseThrow(() -> new NotFoundException("criteria not found"));
   }
 }

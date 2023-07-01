@@ -5,12 +5,16 @@ import com.recipe.api.enums.RequestOperationType;
 import com.recipe.api.util.EnumValidator;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /** This class hold s the user search criteria. */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Valid
 public class SearchCriteria {
   @ApiModelProperty(
@@ -40,10 +44,4 @@ public class SearchCriteria {
 
   @ApiModelProperty(hidden = true)
   private String dataOption;
-
-  public SearchCriteria(String key, String operation, Object value) {
-    this.key = key;
-    this.operation = operation;
-    this.value = value;
-  }
 }
