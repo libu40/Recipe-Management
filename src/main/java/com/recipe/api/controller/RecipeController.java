@@ -58,7 +58,7 @@ public class RecipeController {
         @ApiResponse(code = 500, message = "Application Server Error!"),
         @ApiResponse(code = 404, message = "Recipe not found for the given Id!")
       })
-  @GetMapping(value = "/recipe/{id}", produces = MediaType.APPLICATION_JSON)
+  @GetMapping(value = "/recipes/{id}", produces = MediaType.APPLICATION_JSON)
   public Response getRecipeById(
       @ApiParam(value = "recipe Id", required = true) @PathVariable int id) {
     LOGGER.info("fetch recipe for the id: {}", id);
@@ -101,7 +101,7 @@ public class RecipeController {
         @ApiResponse(code = 404, message = "No recipes found!"),
         @ApiResponse(code = 400, message = "Bad request"),
       })
-  @GetMapping(value = "/recipes", produces = MediaType.APPLICATION_JSON)
+  @GetMapping(value = "/recipes/page", produces = MediaType.APPLICATION_JSON)
   public ResponseEntity<List<RecipeDto>> getRecipeList(
       @RequestParam(defaultValue = "0") Integer pageNo,
       @RequestParam(defaultValue = "10") Integer pageSize,

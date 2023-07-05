@@ -43,9 +43,10 @@ public class Recipe implements Serializable {
 
   @NotBlank
   @Column(nullable = false)
-  private RecipeType variant;
+  private String variant= RecipeType.VEGETARIAN.name();
 
-  @Column private Integer servingCount;
+  @Column(name = "servingCount")
+  private Integer servingCount;
 
   @ManyToMany(
       fetch = FetchType.LAZY,
@@ -60,7 +61,7 @@ public class Recipe implements Serializable {
   public Recipe(
       String name,
       String instruction,
-      RecipeType variant,
+      String variant,
       Integer servingCount,
       Set<Ingredient> ingredients) {
     this.name = name;
@@ -94,11 +95,11 @@ public class Recipe implements Serializable {
     this.instruction = instruction;
   }
 
-  public RecipeType getVariant() {
+  public String getVariant() {
     return variant;
   }
 
-  public void setVariant(RecipeType variant) {
+  public void setVariant(String variant) {
     this.variant = variant;
   }
 

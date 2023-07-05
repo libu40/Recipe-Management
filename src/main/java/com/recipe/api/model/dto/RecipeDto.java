@@ -36,7 +36,7 @@ public class RecipeDto {
 
   @ApiModelProperty(notes = "The type of the returned ingredient", example = "vegetarian")
   @NotBlank
-  private RecipeType variant;
+  private String variant;
 
   @ApiModelProperty(notes = "The serving count of the returned ingredient", example = "4")
   private Integer servingCount;
