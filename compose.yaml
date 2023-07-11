@@ -28,8 +28,7 @@ services:
       - postgresql_data:/var/lib/postgresql/data
 
   prometheus:
-    image: prom/prometheus:v2.35.0
-    network_mode: host
+    image: prom/prometheus
     container_name: prometheus
     restart: unless-stopped
     volumes:
@@ -42,7 +41,6 @@ services:
   grafana:
     image: grafana/grafana-oss:8.5.2
     pull_policy: always
-    network_mode: host
     container_name: grafana
     restart: unless-stopped
     volumes:
@@ -50,9 +48,12 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_SERVER_DOMAIN=localhost
+    ports:
+      - "3000:3000"
 
   mysqldb:
     image: mysql:5.7
+    container_name: database
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=password
@@ -68,6 +69,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    container_name: application
     restart: on-failure
     ports:
       - "8080:8080"
