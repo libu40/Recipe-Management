@@ -116,7 +116,7 @@ more, but I needed to finish the task for today
 
 **Sonarqube**:
 
-Once all the docker containers are UP then goto localhost:9000 which will prompt for default login/password which is admin/admin and ask to 
+Once all the docker containers are UP then goto localhost:9000 which will prompt for default login/password which is admin/admin and ask to
 update the password. **please change the password to sonar from admin** as I've configured sonar as the password in the application for measuring the code quality metrics.
 
 Once after that in the terminal navigate to project root directory and trigger the below command to visualize the metrics.
@@ -129,16 +129,16 @@ Once the docker containers for the Application, Prometheus and Grafana are UP, P
 
 1. Application metrics: http://localhost:8080/restaurant/actuator/prometheus
 2. Prometheus: http://localhost:9090/targets?search=
-3. Grafana: http://localhost:3000/login 
+3. Grafana: http://localhost:3000/login
 
 The application metrics should be visualized like below post hitting the endpoint which collects from the application.
-![](/Users/VW35EY/Developer/Personal/recipe-api/data/images/Application_Metrics.png)
+![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Application_Metrics.png)
 
 The Prometheus status pointing to the target should be UP like as below
-![](/Users/VW35EY/Developer/Personal/recipe-api/data/images/Prometheus_Status.png)
+![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Prometheus_Status.png)
 
 The Grafana login url is accessible with default username/password: admin/admin
-![](/Users/VW35EY/Developer/Personal/recipe-api/data/images/Grafana_Login.png)
+![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Grafana_Login.png)
 
 Once logged in all the above mentioned Urls, In prometheus dashboard hit the below expression to check whether the application metrics are getting pulled.
 
@@ -147,12 +147,12 @@ Once logged in all the above mentioned Urls, In prometheus dashboard hit the bel
 In the grafana, Add the prometheus data source with the below configuration. The only thing to update is the URL.
 
 Please update the url to ****_http://host.docker.internal:9090_**** as shown below.
-![](/Users/VW35EY/Developer/Personal/recipe-api/data/images/Grafana_Configuration.png)
+![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Grafana_Configuration.png)
 
 Create a dashboard and then import the json which I updated in the [](dashboard.json)
 
 Finally the application can be monitored and visualize the metrics as shown below.
-![](/Users/VW35EY/Developer/Personal/recipe-api/data/images/Grafana_Dashboard.png)
+![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Grafana_Dashboard.png)
 
 ## **Implemented** :
 
