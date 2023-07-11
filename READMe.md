@@ -5,7 +5,7 @@
 Create a standalone java application which allows users to manage their favourite recipes. It should
 allow adding,
 updating, removing and fetching recipes.
-Additionally users should be able to filter available recipes based on one or more of the following
+Additionally, users should be able to filter available recipes based on one or more of the following
 criteria:
 
 1. Whether or not the dish is vegetarian
@@ -75,7 +75,7 @@ our artifact image for the creation of containers**
 
 #### **Post Deployment check** :
 
-Once the the deployment is success, We should able to see the below listed containers/resources are
+Once the deployment is success, We should be able to see the below listed containers/resources are
 created up and
 running. This can be checked by docker commands or via docker desktop dashboard.
 
@@ -125,7 +125,7 @@ Once after that in the terminal navigate to project root directory and trigger t
 
 **Prometheus with Grafana**:
 
-Once the docker containers for the Application, Prometheus and Grafana are UP, Please initially check whether the below metric URL's are accessible.
+Once the docker containers for the Application, Prometheus and Grafana are UP, Please initially check whether the below metric URLs are accessible.
 
 1. Application metrics: http://localhost:8080/restaurant/actuator/prometheus
 2. Prometheus: http://localhost:9090/targets?search=
@@ -140,7 +140,7 @@ The Prometheus status pointing to the target should be UP like as below
 The Grafana login url is accessible with default username/password: admin/admin
 ![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Grafana_Login.png)
 
-Once logged in all the above mentioned Urls, In prometheus dashboard hit the below expression to check whether the application metrics are getting pulled.
+Once logged in all the above-mentioned Urls, In prometheus dashboard hit the below expression to check whether the application metrics are getting pulled.
 
 #### **_logback_events_total_**
 
@@ -154,6 +154,21 @@ Create a dashboard and then import the json which I updated in the [](dashboard.
 Finally the application can be monitored and visualize the metrics as shown below.
 ![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Grafana_Dashboard.png)
 
+**OpenAPI with Swagger **:
+
+The application is documented in the below url
+
+1. http://localhost:8080/restaurant/recipe-documentation
+2. http://localhost:8080/restaurant/recipe-api-docs
+
+**JMX with JConsole**:
+
+To see the memory footprint and thread deadlock for any leakages, I've tested the application locally with JConsole launching the application locally.This can be done as follows
+
+1. mvn spring-boot:run
+2. type JConsole in the terminal and the select the process id for the application from the dropdown then it can be visualized as below
+![](https://github.com/libu40/Recipe-Management/blob/main/data/images/JConsole.png)
+
 ## **Implemented** :
 
 The application is implemented in Java 17 with Spring boot 3 and data JPA enabled for persistence
@@ -164,18 +179,39 @@ integrated.
 2. **JPA auditing**
 3. **Swagger**
 4. **MapStruct**
-5. **JMX**
+5. **JMX with JConsole**
 6. **HikariCP**
-7. **Unit test: Junit 5 with Mockito**
-8. **Integration test: Apache Cucumber**
-9. **BDD: Groovy with Apache Cucumber**
-10. **End2End test: mockMVC with Jax-RS**
+7. **Unit test: Junit 5 with Mockito** :Not completed
+8. **Integration test: Apache Cucumber** :Not completed
+9. **BDD: Groovy with Apache Cucumber** :Not completed
+10. **End2End test: mockMVC with Jax-RS** :Not completed
 11. **Database: MySQL**
 12. **Pagination**
 13. **Code quality: SonarQube**
-14. **Application dockerization**
+14. **Application dockerized**
+15. **Liquibase migration**
+
+## **To-Be-Implemented** :
+
+1. CI/CD with Gitlab.
+2. Automatic POM versioning.
+3. CheckMarx scanning.
+4. Maven automatic dependencies update.
+5. Spring security for controller endpoints via Authentication and Authorization (Keycloak).
+
 
 ## Comments :
+
+My thought process to build the application was to be Production ready adhering to best practices and standards we maintain in terms of code quality and performance wise.
+I'm a big fan of TDD and follow the principles of that to build any application in the day to day project, But for this project I haven't picked that due to time constraints.
+My focus was mostly in monitoring and data migration apart from building the business logic as for any Production ready application monitoring should be in place before deployment.
+
+This build **IS NOT** completed yet as I need to write unit testcases, E2E Integration tests, BDD with Apache cucumber and Json data modelling tests.
+
+Please while reviewing consider this as a request as I need some more time to build this functionality.
+
+
+
 
 
 
