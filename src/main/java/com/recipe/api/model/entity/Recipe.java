@@ -18,8 +18,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /** This class is an database entity responsible for holding recipe information. */
@@ -43,9 +46,9 @@ public class Recipe implements Serializable {
 
   @NotBlank
   @Column(nullable = false)
-  private String variant= RecipeType.VEGETARIAN.name();
+  private String variant = RecipeType.VEGETARIAN.name();
 
-  @Column(name = "servingCount")
+  @Column(name = "serving_count")
   private Integer servingCount;
 
   @ManyToMany(
@@ -57,6 +60,16 @@ public class Recipe implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "ingredient_id", referencedColumnName = "id"))
   @JsonIgnoreProperties
   private Set<Ingredient> ingredients;
+
+  @Column(name="created_at",updatable = false)
+  @CreationTimestamp
+  private LocalDateTime createdAt;
+
+  @Column(name="updated_at")
+  @UpdateTimestamp
+  private LocalDateTime updatedAt;
+
+  public Recipe() {}
 
   public Recipe(
       String name,
@@ -117,5 +130,21 @@ public class Recipe implements Serializable {
 
   public void setIngredients(Set<Ingredient> ingredients) {
     this.ingredients = ingredients;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 }

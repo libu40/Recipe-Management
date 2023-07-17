@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 /**
- * This mapper class is responsible for mapping the recipe dto and entities using mapping framework
+ * This mapper class is responsible for mapping the recipe dto and entities using a mapping framework
  * automatically.
  */
 @Component

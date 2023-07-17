@@ -15,8 +15,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /** This class is an database entity responsible for holding ingredient information. */
@@ -25,8 +28,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "ingredient")
 @EntityListeners(AuditingEntityListener.class)
 public class Ingredient implements Serializable {
-  @Serial
-  private static final long serialVersionUID = 1L;
+  @Serial private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -36,12 +38,22 @@ public class Ingredient implements Serializable {
   @Column(nullable = false, unique = true)
   private String name;
 
+  @Column(name = "created_at", updatable = false)
+  @CreationTimestamp
+  private LocalDateTime createdAt;
+
+  @Column(name="updated_at")
+  @UpdateTimestamp
+  private LocalDateTime updatedAt;
+
   @ManyToMany(
       fetch = FetchType.LAZY,
       cascade = {CascadeType.PERSIST, CascadeType.MERGE},
       mappedBy = "ingredients")
   @JsonIgnoreProperties
   private Set<Recipe> recipes;
+
+  public Ingredient() {}
 
   public Ingredient(String name, Set<Recipe> recipes) {
     this.name = name;
@@ -70,5 +82,21 @@ public class Ingredient implements Serializable {
 
   public void setRecipes(Set<Recipe> recipes) {
     this.recipes = recipes;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 }

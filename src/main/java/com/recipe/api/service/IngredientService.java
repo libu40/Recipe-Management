@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,11 +55,11 @@ public class IngredientService {
   }
 
   public List<IngredientDto> getSortedAndPaginatedIngredients(
-      Integer pageNo, Integer pageSize, String sortBy) {
+      Integer pageNo, Integer pageSize, Direction sortBy, String attribute) {
     LOGGER.info("fetch all the ingredients in a sorted paginated way");
     Page<Ingredient> paginatedIngredients =
         ingredientRepository.findAll(
-            PageRequest.of(pageNo, pageSize, Sort.Direction.valueOf(sortBy)));
+            PageRequest.of(pageNo, pageSize, sortBy, attribute));
     List<Ingredient> ingredients = paginatedIngredients.getContent();
     return ingredients.stream().map(ingredientMapper::ingredientEntityToDto).toList();
   }

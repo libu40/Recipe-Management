@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-/** This is the ingredient controller which accepts teh web request. */
+/** This is the ingredient controller that accepts the web request. */
 @Api(value = "Ingredient Controller", tags = "Ingredient Controller")
 @RestController
 @RequestMapping("/api")
@@ -80,11 +81,12 @@ public class IngredientController {
   }
 
   /**
-   * Method to list ingredient in a paginated sorted way.
+   * Method to list ingredient in a paginated sorted way.The default sorting is ascending ASC.
    *
    * @param pageNo page no
    * @param pageSize page size
-   * @param sortBy sort by
+   * @param sortBy sort by default is ASC
+   * @param attribute fields to be sorted
    * @return ingredients
    */
   @ApiOperation(
@@ -101,10 +103,11 @@ public class IngredientController {
   public ResponseEntity<List<IngredientDto>> getIngredientList(
       @RequestParam(defaultValue = "0") Integer pageNo,
       @RequestParam(defaultValue = "10") Integer pageSize,
-      @RequestParam(defaultValue = "id") String sortBy) {
+      @RequestParam(defaultValue = "ASC") Direction sortBy,
+      @RequestParam(defaultValue = "id") String attribute) {
     LOGGER.info("Fetch all the ingredients with pagination enabled in a sorted way");
     List<IngredientDto> ingredients =
-        ingredientService.getSortedAndPaginatedIngredients(pageNo, pageSize, sortBy);
+        ingredientService.getSortedAndPaginatedIngredients(pageNo, pageSize, sortBy, attribute);
     return ResponseEntity.ok().body(ingredients);
   }
 
