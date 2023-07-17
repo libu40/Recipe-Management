@@ -1,7 +1,57 @@
 services:
+
+  sonarqube:
+    image: sonarqube:8.2-community
+    expose:
+      - 9000
+    ports:
+      - "127.0.0.1:9000:9000"
+    networks:
+      - sonarnet
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+    db:
+      image: postgres
+      networks:
+        - sonarnet
+      environment:
+        - POSTGRES_USER=sonar
+        - POSTGRES_PASSWORD=sonar
+      volumes:
+        - postgresql:/var/lib/postgresql
+        - postgresql_data:/var/lib/postgresql/data
+
+  prometheus:
+    image: prom/prometheus:v2.35.0
+    network_mode: host
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./data/prometheus/config:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+
+  grafana:
+    image: grafana/grafana-oss:8.5.2
+    pull_policy: always
+    network_mode: host
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SERVER_DOMAIN=localhost
+
   mysqldb:
     image: mysql:5.7
-    container_name: database
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=password
@@ -11,5 +61,38 @@ services:
     volumes:
       - db:/var/lib/mysql
 
+  app:
+    depends_on:
+      - mysqldb
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_JSON:
+        # yamllint disable-line rule:line-length
+        '{
+        "spring.datasource.url"  : "jdbc:mysql://mysqldb:3306/recipe?useSSL=false",
+        "spring.datasource.username" : "root",
+        "spring.datasource.password" : "password",
+        "spring.jpa.hibernate.ddl-auto" : "update"
+      }'
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+
+networks:
+  sonarnet:
+
 volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_bundled-plugins:
+  postgresql:
+  postgresql_data:
   db:
