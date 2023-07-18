@@ -2,33 +2,33 @@ package com.recipe.api.model.entity;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/** This class is an database entity responsible for holding ingredient information. */
+/** This class is a database entity responsible for holding ingredient information. */
 @Entity
 @DynamicUpdate
 @Table(name = "ingredient")
 @EntityListeners(AuditingEntityListener.class)
-public class Ingredient implements Serializable {
-  @Serial private static final long serialVersionUID = 1L;
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Ingredient {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -42,23 +42,13 @@ public class Ingredient implements Serializable {
   @CreationTimestamp
   private LocalDateTime createdAt;
 
-  @Column(name="updated_at")
+  @Column(name = "updated_at")
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  @ManyToMany(
-      fetch = FetchType.LAZY,
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-      mappedBy = "ingredients")
-  @JsonIgnoreProperties
-  private Set<Recipe> recipes;
-
-  public Ingredient() {}
-
-  public Ingredient(String name, Set<Recipe> recipes) {
-    this.name = name;
-    this.recipes = recipes;
-  }
+  @ManyToMany(mappedBy = "ingredients")
+  @JsonIgnoreProperties(value = "ingredients")
+  private Set<Recipe> recipes = new HashSet<>();
 
   public Integer getId() {
     return id;

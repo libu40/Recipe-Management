@@ -5,6 +5,7 @@ import com.recipe.api.mapper.IngredientMapper;
 import com.recipe.api.model.dto.IngredientDto;
 import com.recipe.api.model.entity.Ingredient;
 import com.recipe.api.repository.IngredientRepository;
+import com.recipe.api.util.CycleAvoidingMappingContext;
 import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +40,8 @@ public class IngredientService {
     Optional<Ingredient> ingredient = ingredientRepository.findById(id);
     if (ingredient.isPresent()) {
       Ingredient ingredientEntity = ingredient.get();
-      return ingredientMapper.ingredientEntityToDto(ingredientEntity);
+      return ingredientMapper.ingredientEntityToDto(
+          ingredientEntity, new CycleAvoidingMappingContext());
     }
     throw new EntityNotFoundException(Ingredient.class, "id", String.valueOf(id));
   }
@@ -49,7 +50,12 @@ public class IngredientService {
     LOGGER.info("fetch all the ingredients");
     List<Ingredient> ingredients = ingredientRepository.findAll();
     if (!ingredients.isEmpty()) {
-      return ingredients.stream().map(ingredientMapper::ingredientEntityToDto).toList();
+      return ingredients.stream()
+          .map(
+              ingredient ->
+                  ingredientMapper.ingredientEntityToDto(
+                      ingredient, new CycleAvoidingMappingContext()))
+          .toList();
     }
     throw new EntityNotFoundException(Ingredient.class);
   }
@@ -58,15 +64,20 @@ public class IngredientService {
       Integer pageNo, Integer pageSize, Direction sortBy, String attribute) {
     LOGGER.info("fetch all the ingredients in a sorted paginated way");
     Page<Ingredient> paginatedIngredients =
-        ingredientRepository.findAll(
-            PageRequest.of(pageNo, pageSize, sortBy, attribute));
+        ingredientRepository.findAll(PageRequest.of(pageNo, pageSize, sortBy, attribute));
     List<Ingredient> ingredients = paginatedIngredients.getContent();
-    return ingredients.stream().map(ingredientMapper::ingredientEntityToDto).toList();
+    return ingredients.stream()
+        .map(
+            ingredient ->
+                ingredientMapper.ingredientEntityToDto(
+                    ingredient, new CycleAvoidingMappingContext()))
+        .toList();
   }
 
   public void createIngredient(IngredientDto ingredient) {
     LOGGER.info("create the ingredients");
-    Ingredient saveIngredient = ingredientMapper.ingredientDtoToEntity(ingredient);
+    Ingredient saveIngredient =
+        ingredientMapper.ingredientDtoToEntity(ingredient, new CycleAvoidingMappingContext());
     ingredientRepository.save(saveIngredient);
   }
 }

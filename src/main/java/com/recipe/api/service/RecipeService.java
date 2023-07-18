@@ -8,6 +8,7 @@ import com.recipe.api.model.valueobject.SearchCriteria;
 import com.recipe.api.model.valueobject.SearchRequest;
 import com.recipe.api.repository.RecipeRepository;
 import com.recipe.api.search.SearchSpecificationBuilder;
+import com.recipe.api.util.CycleAvoidingMappingContext;
 import jakarta.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +46,9 @@ public class RecipeService {
     LOGGER.info("fetching all the recipes");
     List<Recipe> recipeList = recipeRepository.findAll();
     if (!recipeList.isEmpty()) {
-      return recipeList.stream().map(recipeMapper::recipeEntityToDto).toList();
+      return recipeList.stream()
+          .map(recipe -> recipeMapper.recipeEntityToDto(recipe, new CycleAvoidingMappingContext()))
+          .toList();
     }
     return new ArrayList<>();
   }
@@ -53,30 +57,33 @@ public class RecipeService {
     LOGGER.info("fetching all the recipes");
     Optional<Recipe> recipe = recipeRepository.findById(id);
     if (recipe.isPresent()) {
-      return recipeMapper.recipeEntityToDto(recipe.get());
+      return recipeMapper.recipeEntityToDto(recipe.get(), new CycleAvoidingMappingContext());
     } else {
       throw new EntityNotFoundException(RecipeService.class, "id", String.valueOf(id));
     }
   }
 
   public List<RecipeDto> getSortedAndPaginatedRecipes(
-      Integer pageNo, Integer pageSize, String sortBy) {
+      Integer pageNo, Integer pageSize, Direction sortBy, String field) {
     LOGGER.info(
         "fetching the recipes in a sorted paginated way for pageNo: {} pageSize: {} sortBy: {}",
         pageNo,
         pageSize,
         sortBy);
     Page<Recipe> recipeList =
-        recipeRepository.findAll(PageRequest.of(pageNo, pageSize, Sort.Direction.valueOf(sortBy)));
+        recipeRepository.findAll(PageRequest.of(pageNo, pageSize, sortBy, field));
     if (!recipeList.isEmpty()) {
-      return recipeList.getContent().stream().map(recipeMapper::recipeEntityToDto).toList();
+      return recipeList.getContent().stream()
+          .map(recipe -> recipeMapper.recipeEntityToDto(recipe, new CycleAvoidingMappingContext()))
+          .toList();
     }
     return new ArrayList<>();
   }
 
   public void createRecipe(RecipeDto recipe) {
     LOGGER.info("Create recipe");
-    recipeRepository.save(recipeMapper.recipeDtoToEntity(recipe));
+    recipeRepository.save(
+        recipeMapper.recipeDtoToEntity(recipe, new CycleAvoidingMappingContext()));
   }
 
   public RecipeDto updateRecipe(int id, RecipeDto recipeDto) {
@@ -95,7 +102,7 @@ public class RecipeService {
       recipe.get().setVariant(recipeDto.getVariant());
 
       Recipe updatedRecipe = recipeRepository.save(recipe.get());
-      return recipeMapper.recipeEntityToDto(updatedRecipe);
+      return recipeMapper.recipeEntityToDto(updatedRecipe, new CycleAvoidingMappingContext());
     } else {
       throw new EntityNotFoundException(RecipeService.class, "id", String.valueOf(id));
     }
@@ -119,7 +126,9 @@ public class RecipeService {
     Specification<Recipe> recipeSpecification = createRecipeSpecification(searchRequest, builder);
     Page<Recipe> filteredRecipes = recipeRepository.findAll(recipeSpecification, pageRequest);
 
-    return filteredRecipes.toList().stream().map(recipeMapper::recipeEntityToDto).toList();
+    return filteredRecipes.toList().stream()
+        .map(recipe -> recipeMapper.recipeEntityToDto(recipe, new CycleAvoidingMappingContext()))
+        .toList();
   }
 
   private Specification<Recipe> createRecipeSpecification(

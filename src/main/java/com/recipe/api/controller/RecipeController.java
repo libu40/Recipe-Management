@@ -10,12 +10,12 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -59,11 +59,11 @@ public class RecipeController {
         @ApiResponse(code = 404, message = "Recipe not found for the given Id!")
       })
   @GetMapping(value = "/recipes/{id}", produces = MediaType.APPLICATION_JSON)
-  public Response getRecipeById(
+  public ResponseEntity<RecipeDto> getRecipeById(
       @ApiParam(value = "recipe Id", required = true) @PathVariable int id) {
     LOGGER.info("fetch recipe for the id: {}", id);
     RecipeDto recipe = recipeService.getRecipeById(id);
-    return Response.status(Response.Status.OK).entity(recipe).build();
+    return ResponseEntity.ok().body(recipe);
   }
 
   /**
@@ -86,11 +86,12 @@ public class RecipeController {
   }
 
   /**
-   * Method to list recipes in a paginated sorted way.
+   * Method to list recipes in a paginated sorted way. Currently single filed is supported.
    *
    * @param pageNo page no
    * @param pageSize page size
    * @param sortBy sort by
+   * @param attribute field for sorting
    * @return ingredients
    */
   @ApiOperation(value = "List all recipes in a paginated sorted order", response = RecipeDto.class)
@@ -105,9 +106,10 @@ public class RecipeController {
   public ResponseEntity<List<RecipeDto>> getRecipeList(
       @RequestParam(defaultValue = "0") Integer pageNo,
       @RequestParam(defaultValue = "10") Integer pageSize,
-      @RequestParam(defaultValue = "id") String sortBy) {
+      @RequestParam(defaultValue = "ASC") Direction sortBy,
+      @RequestParam(defaultValue = "id") String attribute) {
     LOGGER.info("Fetch all the recipes with pagination enabled in a sorted way");
-    List<RecipeDto> recipes = recipeService.getSortedAndPaginatedRecipes(pageNo, pageSize, sortBy);
+    List<RecipeDto> recipes = recipeService.getSortedAndPaginatedRecipes(pageNo, pageSize, sortBy, attribute);
     return ResponseEntity.ok().body(recipes);
   }
 
