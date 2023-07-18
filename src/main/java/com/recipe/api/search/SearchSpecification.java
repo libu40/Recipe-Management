@@ -1,6 +1,6 @@
 package com.recipe.api.search;
 
-import static com.recipe.api.util.Constants.JOINED_TABLE_NAME;
+import static com.recipe.api.constants.Constants.JOINED_TABLE_NAME;
 
 import com.recipe.api.enums.RecipeSearch;
 import com.recipe.api.model.entity.Recipe;

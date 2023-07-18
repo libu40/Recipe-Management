@@ -81,7 +81,7 @@ public class IngredientController {
   }
 
   /**
-   * Method to list ingredient in a paginated sorted way.The default sorting is ascending ASC.
+   * Method to list ingredient in a paginated sorted way. The default sorting is ascending ASC.
    *
    * @param pageNo page no
    * @param pageSize page size

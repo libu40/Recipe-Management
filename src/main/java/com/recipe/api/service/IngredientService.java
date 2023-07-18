@@ -1,13 +1,15 @@
 package com.recipe.api.service;
 
 import com.recipe.api.exception.EntityNotFoundException;
-import com.recipe.api.mapper.IngredientMapper;
 import com.recipe.api.model.dto.IngredientDto;
+import com.recipe.api.model.dto.RecipeDto;
 import com.recipe.api.model.entity.Ingredient;
+import com.recipe.api.model.entity.Recipe;
 import com.recipe.api.repository.IngredientRepository;
-import com.recipe.api.util.CycleAvoidingMappingContext;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +28,16 @@ public class IngredientService {
 
   private final IngredientRepository ingredientRepository;
 
-  private final IngredientMapper ingredientMapper;
-
   @Autowired
-  public IngredientService(
-      IngredientRepository ingredientRepository, IngredientMapper ingredientMapper) {
+  public IngredientService(IngredientRepository ingredientRepository) {
     this.ingredientRepository = ingredientRepository;
-    this.ingredientMapper = ingredientMapper;
   }
 
   public IngredientDto getIngredientById(int id) {
     LOGGER.info("fetch ingredients by id: {}", id);
     Optional<Ingredient> ingredient = ingredientRepository.findById(id);
     if (ingredient.isPresent()) {
-      Ingredient ingredientEntity = ingredient.get();
-      return ingredientMapper.ingredientEntityToDto(
-          ingredientEntity, new CycleAvoidingMappingContext());
+      return convertToDto(ingredient.get());
     }
     throw new EntityNotFoundException(Ingredient.class, "id", String.valueOf(id));
   }
@@ -50,12 +46,7 @@ public class IngredientService {
     LOGGER.info("fetch all the ingredients");
     List<Ingredient> ingredients = ingredientRepository.findAll();
     if (!ingredients.isEmpty()) {
-      return ingredients.stream()
-          .map(
-              ingredient ->
-                  ingredientMapper.ingredientEntityToDto(
-                      ingredient, new CycleAvoidingMappingContext()))
-          .toList();
+      return ingredients.stream().map(this::convertToDto).toList();
     }
     throw new EntityNotFoundException(Ingredient.class);
   }
@@ -66,18 +57,56 @@ public class IngredientService {
     Page<Ingredient> paginatedIngredients =
         ingredientRepository.findAll(PageRequest.of(pageNo, pageSize, sortBy, attribute));
     List<Ingredient> ingredients = paginatedIngredients.getContent();
-    return ingredients.stream()
-        .map(
-            ingredient ->
-                ingredientMapper.ingredientEntityToDto(
-                    ingredient, new CycleAvoidingMappingContext()))
-        .toList();
+    return ingredients.stream().map(this::convertToDto).toList();
   }
 
   public void createIngredient(IngredientDto ingredient) {
     LOGGER.info("create the ingredients");
-    Ingredient saveIngredient =
-        ingredientMapper.ingredientDtoToEntity(ingredient, new CycleAvoidingMappingContext());
+    Ingredient saveIngredient = convertToEntity(ingredient);
     ingredientRepository.save(saveIngredient);
+  }
+
+  /**
+   * The method responsible for converting the entity to dto.
+   *
+   * @param ingredient entity
+   * @return ingredient dto
+   */
+  private IngredientDto convertToDto(Ingredient ingredient) {
+    Set<RecipeDto> recipes = new HashSet<>();
+    IngredientDto ingredientDto = new IngredientDto();
+    RecipeDto recipeDto = new RecipeDto();
+    ingredientDto.setName(ingredient.getName());
+    for (Recipe recipeEntity : ingredient.getRecipes()) {
+      recipeDto.setName(recipeEntity.getName());
+      recipeDto.setVariant(recipeEntity.getVariant());
+      recipeDto.setInstruction(recipeEntity.getInstruction());
+      recipeDto.setServingCount(recipeEntity.getServingCount());
+      recipes.add(recipeDto);
+    }
+    ingredientDto.setRecipes(recipes);
+    return ingredientDto;
+  }
+
+  /**
+   * The method responsible for converting dto to entity.
+   *
+   * @param ingredientDto ingredient dto
+   * @return ingredient entity
+   */
+  private Ingredient convertToEntity(IngredientDto ingredientDto) {
+    Set<Recipe> recipes = new HashSet<>();
+    Ingredient ingredient = new Ingredient();
+    Recipe recipeEntity = new Recipe();
+    ingredient.setName(ingredientDto.getName());
+    for (RecipeDto recipeDto : ingredientDto.getRecipes()) {
+      recipeEntity.setName(recipeDto.getName());
+      recipeEntity.setInstruction(recipeDto.getInstruction());
+      recipeEntity.setServingCount(recipeDto.getServingCount());
+      recipeEntity.setVariant(recipeDto.getVariant());
+      recipes.add(recipeEntity);
+    }
+    ingredient.setRecipes(recipes);
+    return ingredient;
   }
 }

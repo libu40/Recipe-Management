@@ -2,7 +2,7 @@ package com.recipe.api.model.valueobject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.recipe.api.enums.RequestDataOptionType;
-import com.recipe.api.util.EnumValidator;
+import com.recipe.api.enums.EnumValidator;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.Valid;
 import java.util.List;

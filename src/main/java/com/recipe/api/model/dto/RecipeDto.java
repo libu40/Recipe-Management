@@ -1,13 +1,12 @@
 package com.recipe.api.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(Include.NON_NULL)
 @Getter
 @Setter
 public class RecipeDto {
@@ -35,6 +35,6 @@ public class RecipeDto {
   private Integer servingCount;
 
   @ApiModelProperty(notes = "The ingredients used for this recipe")
-  @NotNull
+  @NotBlank
   private Set<IngredientDto> ingredients;
 }

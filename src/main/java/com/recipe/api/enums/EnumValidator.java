@@ -1,4 +1,4 @@
-package com.recipe.api.util;
+package com.recipe.api.enums;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;

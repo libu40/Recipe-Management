@@ -2,8 +2,9 @@ package com.recipe.api.model.entity;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.recipe.api.enums.RecipeType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,6 +33,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Recipe {
 
   @Id
@@ -56,7 +58,6 @@ public class Recipe {
       name = "recipe_ingredient",
       joinColumns = @JoinColumn(name = "recipe_id"),
       inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
-  @JsonIgnoreProperties(value = "recipes")
   private Set<Ingredient> ingredients = new HashSet<>();
 
   @Column(name = "created_at", updatable = false)

@@ -2,8 +2,9 @@ package com.recipe.api.model.entity;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -28,6 +29,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Ingredient {
 
   @Id
@@ -47,7 +49,6 @@ public class Ingredient {
   private LocalDateTime updatedAt;
 
   @ManyToMany(mappedBy = "ingredients")
-  @JsonIgnoreProperties(value = "ingredients")
   private Set<Recipe> recipes = new HashSet<>();
 
   public Integer getId() {

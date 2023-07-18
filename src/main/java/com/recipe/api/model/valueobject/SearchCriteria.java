@@ -2,7 +2,7 @@ package com.recipe.api.model.valueobject;
 
 import com.recipe.api.enums.RequestKeyType;
 import com.recipe.api.enums.RequestOperationType;
-import com.recipe.api.util.EnumValidator;
+import com.recipe.api.enums.EnumValidator;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

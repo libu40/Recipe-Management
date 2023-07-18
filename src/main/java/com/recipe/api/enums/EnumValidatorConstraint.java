@@ -1,4 +1,4 @@
-package com.recipe.api.util;
+package com.recipe.api.enums;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

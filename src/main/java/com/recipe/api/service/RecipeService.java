@@ -1,18 +1,20 @@
 package com.recipe.api.service;
 
 import com.recipe.api.exception.EntityNotFoundException;
-import com.recipe.api.mapper.RecipeMapper;
+import com.recipe.api.model.dto.IngredientDto;
 import com.recipe.api.model.dto.RecipeDto;
+import com.recipe.api.model.entity.Ingredient;
 import com.recipe.api.model.entity.Recipe;
 import com.recipe.api.model.valueobject.SearchCriteria;
 import com.recipe.api.model.valueobject.SearchRequest;
 import com.recipe.api.repository.RecipeRepository;
 import com.recipe.api.search.SearchSpecificationBuilder;
-import com.recipe.api.util.CycleAvoidingMappingContext;
 import jakarta.ws.rs.NotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,21 +36,16 @@ public class RecipeService {
 
   private final RecipeRepository recipeRepository;
 
-  private final RecipeMapper recipeMapper;
-
   @Autowired
-  public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper) {
+  public RecipeService(RecipeRepository recipeRepository) {
     this.recipeRepository = recipeRepository;
-    this.recipeMapper = recipeMapper;
   }
 
   public List<RecipeDto> getAllRecipes() {
     LOGGER.info("fetching all the recipes");
     List<Recipe> recipeList = recipeRepository.findAll();
     if (!recipeList.isEmpty()) {
-      return recipeList.stream()
-          .map(recipe -> recipeMapper.recipeEntityToDto(recipe, new CycleAvoidingMappingContext()))
-          .toList();
+      return recipeList.stream().map(this::convertToDto).toList();
     }
     return new ArrayList<>();
   }
@@ -57,7 +54,7 @@ public class RecipeService {
     LOGGER.info("fetching all the recipes");
     Optional<Recipe> recipe = recipeRepository.findById(id);
     if (recipe.isPresent()) {
-      return recipeMapper.recipeEntityToDto(recipe.get(), new CycleAvoidingMappingContext());
+      return convertToDto(recipe.get());
     } else {
       throw new EntityNotFoundException(RecipeService.class, "id", String.valueOf(id));
     }
@@ -73,17 +70,14 @@ public class RecipeService {
     Page<Recipe> recipeList =
         recipeRepository.findAll(PageRequest.of(pageNo, pageSize, sortBy, field));
     if (!recipeList.isEmpty()) {
-      return recipeList.getContent().stream()
-          .map(recipe -> recipeMapper.recipeEntityToDto(recipe, new CycleAvoidingMappingContext()))
-          .toList();
+      return recipeList.getContent().stream().map(this::convertToDto).toList();
     }
     return new ArrayList<>();
   }
 
   public void createRecipe(RecipeDto recipe) {
     LOGGER.info("Create recipe");
-    recipeRepository.save(
-        recipeMapper.recipeDtoToEntity(recipe, new CycleAvoidingMappingContext()));
+    recipeRepository.save(convertToEntity(recipe));
   }
 
   public RecipeDto updateRecipe(int id, RecipeDto recipeDto) {
@@ -102,7 +96,7 @@ public class RecipeService {
       recipe.get().setVariant(recipeDto.getVariant());
 
       Recipe updatedRecipe = recipeRepository.save(recipe.get());
-      return recipeMapper.recipeEntityToDto(updatedRecipe, new CycleAvoidingMappingContext());
+      return convertToDto(updatedRecipe);
     } else {
       throw new EntityNotFoundException(RecipeService.class, "id", String.valueOf(id));
     }
@@ -126,9 +120,7 @@ public class RecipeService {
     Specification<Recipe> recipeSpecification = createRecipeSpecification(searchRequest, builder);
     Page<Recipe> filteredRecipes = recipeRepository.findAll(recipeSpecification, pageRequest);
 
-    return filteredRecipes.toList().stream()
-        .map(recipe -> recipeMapper.recipeEntityToDto(recipe, new CycleAvoidingMappingContext()))
-        .toList();
+    return filteredRecipes.toList().stream().map(this::convertToDto).toList();
   }
 
   private Specification<Recipe> createRecipeSpecification(
@@ -156,5 +148,49 @@ public class RecipeService {
     }
 
     return builder.build().orElseThrow(() -> new NotFoundException("criteria not found"));
+  }
+
+  /**
+   * The method responsible for converting the entity to dto.
+   *
+   * @param recipe entity
+   * @return recipe dto
+   */
+  private RecipeDto convertToDto(Recipe recipe) {
+    Set<IngredientDto> ingredientDtoSet = new HashSet<>();
+    RecipeDto recipeDto = new RecipeDto();
+    IngredientDto ingredientDto = new IngredientDto();
+    recipeDto.setName(recipe.getName());
+    recipeDto.setServingCount(recipe.getServingCount());
+    recipeDto.setInstruction(recipe.getInstruction());
+    recipeDto.setVariant(recipe.getVariant());
+    for (Ingredient ingredient : recipe.getIngredients()) {
+      ingredientDto.setName(ingredient.getName());
+      ingredientDtoSet.add(ingredientDto);
+    }
+    recipeDto.setIngredients(ingredientDtoSet);
+    return recipeDto;
+  }
+
+  /**
+   * The method responsible for converting from dto to entity.
+   *
+   * @param recipeDto recipe dto
+   * @return recipe entity
+   */
+  private Recipe convertToEntity(RecipeDto recipeDto) {
+    Set<Ingredient> ingredients = new HashSet<>();
+    Recipe recipe = new Recipe();
+    Ingredient ingredient = new Ingredient();
+    recipe.setName(recipeDto.getName());
+    recipe.setVariant(recipe.getVariant());
+    recipe.setServingCount(recipeDto.getServingCount());
+    recipe.setInstruction(recipe.getInstruction());
+    for (IngredientDto ingredientDto : recipeDto.getIngredients()) {
+      ingredient.setName(ingredientDto.getName());
+      ingredients.add(ingredient);
+    }
+    recipe.setIngredients(ingredients);
+    return recipe;
   }
 }
