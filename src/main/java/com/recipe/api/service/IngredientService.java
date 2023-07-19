@@ -82,8 +82,12 @@ public class IngredientService {
       recipeDto.setVariant(recipeEntity.getVariant());
       recipeDto.setInstruction(recipeEntity.getInstruction());
       recipeDto.setServingCount(recipeEntity.getServingCount());
+      recipeDto.setCreatedAt(recipeEntity.getCreatedAt());
+      recipeDto.setUpdatedAt(recipeEntity.getUpdatedAt());
       recipes.add(recipeDto);
     }
+    ingredientDto.setCreatedAt(ingredient.getCreatedAt());
+    ingredientDto.setUpdatedAt(ingredient.getUpdatedAt());
     ingredientDto.setRecipes(recipes);
     return ingredientDto;
   }
@@ -99,12 +103,14 @@ public class IngredientService {
     Ingredient ingredient = new Ingredient();
     Recipe recipeEntity = new Recipe();
     ingredient.setName(ingredientDto.getName());
-    for (RecipeDto recipeDto : ingredientDto.getRecipes()) {
-      recipeEntity.setName(recipeDto.getName());
-      recipeEntity.setInstruction(recipeDto.getInstruction());
-      recipeEntity.setServingCount(recipeDto.getServingCount());
-      recipeEntity.setVariant(recipeDto.getVariant());
-      recipes.add(recipeEntity);
+    if (ingredientDto.getRecipes() != null) {
+      for (RecipeDto recipeDto : ingredientDto.getRecipes()) {
+        recipeEntity.setName(recipeDto.getName());
+        recipeEntity.setInstruction(recipeDto.getInstruction());
+        recipeEntity.setServingCount(recipeDto.getServingCount());
+        recipeEntity.setVariant(recipeDto.getVariant());
+        recipes.add(recipeEntity);
+      }
     }
     ingredient.setRecipes(recipes);
     return ingredient;

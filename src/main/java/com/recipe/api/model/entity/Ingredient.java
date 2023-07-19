@@ -5,9 +5,11 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -48,7 +50,7 @@ public class Ingredient {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  @ManyToMany(mappedBy = "ingredients")
+  @ManyToMany(mappedBy = "ingredients",  cascade= {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private Set<Recipe> recipes = new HashSet<>();
 
   public Integer getId() {
