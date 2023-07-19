@@ -8,7 +8,7 @@ updating, removing and fetching recipes.
 Additionally, users should be able to filter available recipes based on one or more of the following
 criteria:
 
-1. Whether or not the dish is vegetarian
+1. Whether the dish is vegetarian
 2. The number of servings
 3. Specific ingredients (either include or exclude)
 4. Text search within the instructions.
@@ -16,7 +16,7 @@ criteria:
 For example, the API should be able to handle the following search requests:
 
 1. All vegetarian recipes
-2. Recipes that can serve 4 persons and have “potatoes” as an ingredient
+2. Recipes that can serve 4 people and have “potatoes” as an ingredient
 3. Recipes without “salmon” as an ingredient that has “oven” in the instructions.
 
 ## Requirements :
@@ -25,7 +25,7 @@ Please ensure that we have some documentation about the architectural choices an
 run the application. The project is expected to be delivered as a GitHub (or any other public git
 hosting) repository URL.
 
-All these requirements needs to be satisfied:
+All these requirements need to be satisfied:
 
 1. It must be a REST application implemented using Java (use a framework of your choice)
 2. Your code should be production-ready.
@@ -66,16 +66,16 @@ All these requirements needs to be satisfied:
 
 1. Trigger **docker-compose up** to deploy the artifact for building the container along with the
    other resources
-   mentioned in the compose file.
+   mentioned in the composed file.
 
 **Please be patient as during this initial deployment will cause sometime to pull the images from
 the docker registry
 and build the image along with
 our artifact image for the creation of containers**
 
-#### **Post Deployment check** :
+#### **Post-Deployment check** :
 
-Once the deployment is success, We should be able to see the below listed containers/resources are
+Once the deployment is a success, We should be able to see the below-listed containers/resources are
 created up and
 running. This can be checked by docker commands or via docker desktop dashboard.
 
@@ -110,16 +110,19 @@ recipes as
 many-to-many relationship, since many ingredients might be used in many recipes.
 Finally, I've tried to cover as much as test cases I could, I have 75 unit and integration tests, I
 might have added
-more, but I needed to finish the task for today
+more, but I needed to finish the task for today.
+
+The REST endpoints for testing are being attached as a collection in the project source code directory under the name **[postman-collection](https://github.com/libu40/Recipe-Management/blob/main/postman-collection)** 
+which can exported and tested locally in the Postman client apart from Swagger OpenAPI.
 
 ## **Monitoring** :
 
 **Sonarqube**:
 
-Once all the docker containers are UP then goto localhost:9000 which will prompt for default login/password which is admin/admin and ask to
-update the password. **please change the password to sonar from admin** as I've configured sonar as the password in the application for measuring the code quality metrics.
+Once all the docker containers are UP,then goto localhost:9000 which will prompt for default login/password which is admin/admin and ask to
+update the password. **Please change the password to sonar from admin** as I've configured sonar as the password in the application for measuring the code quality metrics.
 
-Once after that in the terminal navigate to project root directory and trigger the below command to visualize the metrics.
+Once after that in the terminal, navigate to project root directory and trigger the below command to visualize the metrics.
 
 **mvn clean install sonar:sonar**
 
@@ -151,7 +154,7 @@ Please update the url to ****_http://host.docker.internal:9090_**** as shown bel
 
 Create a dashboard and then import the json which I updated in the [](dashboard.json)
 
-Finally the application can be monitored and visualize the metrics as shown below.
+Finally, the application can be monitored and visualize the metrics as shown below.
 ![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Grafana_Dashboard.png)
 
 **OpenAPI with Swagger **:
@@ -163,16 +166,16 @@ The application is documented in the below url
 
 **JMX with JConsole**:
 
-To see the memory footprint and thread deadlock for any leakages, I've tested the application locally with JConsole launching the application locally.This can be done as follows
+To see the memory footprint and thread deadlock for any leakages, I've tested the application locally with JConsole launching the application locally. This can be done as follows
 
 1. mvn spring-boot:run
-2. type JConsole in the terminal and the select the process id for the application from the dropdown then it can be visualized as below
+2. type JConsole in the terminal, and the select the process id for the application from the dropdown then it can be visualized as below
 ![](https://github.com/libu40/Recipe-Management/blob/main/data/images/JConsole.png)
 
 ## **Implemented** :
 
 The application is implemented in Java 17 with Spring boot 3 and data JPA enabled for persistence
-and CRUD operations. As the application to be built is Production ready the following features were
+and CRUD operations. As the application to be built is Production ready, the following features were
 integrated.
 
 1. **Prometheus with Grafana**
@@ -202,9 +205,9 @@ integrated.
 
 ## Comments :
 
-My thought process to build the application was to be Production ready adhering to best practices and standards we maintain in terms of code quality and performance wise.
-I'm a big fan of TDD and follow the principles of that to build any application in the day to day project, But for this project I haven't picked that due to time constraints.
-My focus was mostly in monitoring and data migration apart from building the business logic as for any Production ready application monitoring should be in place before deployment.
+My thought process to build the application was to be Production ready, adhering to best practices and standards we maintain in terms of code quality and performance wise.
+I'm a big fan of TDD and follow the principles of that to build any application in the day-to-day project, But for this project I haven't picked that due to time constraints.
+My focus was mostly on monitoring and data migration apart from building the business logic as for any Production ready application monitoring should be in place before deployment.
 
 This build **IS NOT** completed yet as I need to write unit testcases, E2E Integration tests, BDD with Apache cucumber and Json data modelling tests.
 
