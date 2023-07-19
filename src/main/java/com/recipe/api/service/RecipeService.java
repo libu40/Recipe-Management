@@ -159,16 +159,18 @@ public class RecipeService {
   private RecipeDto convertToDto(Recipe recipe) {
     Set<IngredientDto> ingredientDtoSet = new HashSet<>();
     RecipeDto recipeDto = new RecipeDto();
-    IngredientDto ingredientDto = new IngredientDto();
     recipeDto.setName(recipe.getName());
     recipeDto.setServingCount(recipe.getServingCount());
     recipeDto.setInstruction(recipe.getInstruction());
     recipeDto.setVariant(recipe.getVariant());
-    for (Ingredient ingredient : recipe.getIngredients()) {
-      ingredientDto.setName(ingredient.getName());
-      ingredientDto.setCreatedAt(ingredient.getCreatedAt());
-      ingredientDto.setUpdatedAt(ingredient.getUpdatedAt());
-      ingredientDtoSet.add(ingredientDto);
+    if (recipe.getIngredients() != null) {
+      for (Ingredient ingredient : recipe.getIngredients()) {
+        IngredientDto ingredientDto = new IngredientDto();
+        ingredientDto.setName(ingredient.getName());
+        ingredientDto.setCreatedAt(ingredient.getCreatedAt());
+        ingredientDto.setUpdatedAt(ingredient.getUpdatedAt());
+        ingredientDtoSet.add(ingredientDto);
+      }
     }
     recipeDto.setCreatedAt(recipe.getCreatedAt());
     recipeDto.setUpdatedAt(recipe.getUpdatedAt());
@@ -185,13 +187,13 @@ public class RecipeService {
   private Recipe convertToEntity(RecipeDto recipeDto) {
     Set<Ingredient> ingredients = new HashSet<>();
     Recipe recipe = new Recipe();
-    Ingredient ingredient = new Ingredient();
     recipe.setName(recipeDto.getName());
     recipe.setVariant(recipe.getVariant());
     recipe.setServingCount(recipeDto.getServingCount());
     recipe.setInstruction(recipe.getInstruction());
     if (recipeDto.getIngredients() != null) {
       for (IngredientDto ingredientDto : recipeDto.getIngredients()) {
+        Ingredient ingredient = new Ingredient();
         ingredient.setName(ingredientDto.getName());
         ingredients.add(ingredient);
       }

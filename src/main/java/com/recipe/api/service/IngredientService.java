@@ -75,16 +75,18 @@ public class IngredientService {
   private IngredientDto convertToDto(Ingredient ingredient) {
     Set<RecipeDto> recipes = new HashSet<>();
     IngredientDto ingredientDto = new IngredientDto();
-    RecipeDto recipeDto = new RecipeDto();
     ingredientDto.setName(ingredient.getName());
-    for (Recipe recipeEntity : ingredient.getRecipes()) {
-      recipeDto.setName(recipeEntity.getName());
-      recipeDto.setVariant(recipeEntity.getVariant());
-      recipeDto.setInstruction(recipeEntity.getInstruction());
-      recipeDto.setServingCount(recipeEntity.getServingCount());
-      recipeDto.setCreatedAt(recipeEntity.getCreatedAt());
-      recipeDto.setUpdatedAt(recipeEntity.getUpdatedAt());
-      recipes.add(recipeDto);
+    if (ingredient.getRecipes() != null) {
+      for (Recipe recipeEntity : ingredient.getRecipes()) {
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setName(recipeEntity.getName());
+        recipeDto.setVariant(recipeEntity.getVariant());
+        recipeDto.setInstruction(recipeEntity.getInstruction());
+        recipeDto.setServingCount(recipeEntity.getServingCount());
+        recipeDto.setCreatedAt(recipeEntity.getCreatedAt());
+        recipeDto.setUpdatedAt(recipeEntity.getUpdatedAt());
+        recipes.add(recipeDto);
+      }
     }
     ingredientDto.setCreatedAt(ingredient.getCreatedAt());
     ingredientDto.setUpdatedAt(ingredient.getUpdatedAt());
@@ -101,10 +103,10 @@ public class IngredientService {
   private Ingredient convertToEntity(IngredientDto ingredientDto) {
     Set<Recipe> recipes = new HashSet<>();
     Ingredient ingredient = new Ingredient();
-    Recipe recipeEntity = new Recipe();
     ingredient.setName(ingredientDto.getName());
     if (ingredientDto.getRecipes() != null) {
       for (RecipeDto recipeDto : ingredientDto.getRecipes()) {
+        Recipe recipeEntity = new Recipe();
         recipeEntity.setName(recipeDto.getName());
         recipeEntity.setInstruction(recipeDto.getInstruction());
         recipeEntity.setServingCount(recipeDto.getServingCount());

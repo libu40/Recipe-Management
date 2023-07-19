@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-/** This is the recipe controller which accepts teh web request. */
+/** This is the recipe controller that accepts the web request. */
 @Api(value = "Recipe Controller", tags = "Recipe Controller")
 @RestController
 @RequestMapping("/api")
@@ -46,7 +46,7 @@ public class RecipeController {
   }
 
   /**
-   * Method to list recipe by id
+   * Method to list a recipe by id
    *
    * @param id id
    * @return recipe
@@ -114,7 +114,7 @@ public class RecipeController {
   }
 
   /**
-   * Method to create an recipe
+   * Method to create a recipe
    *
    * @param recipe recipe
    * @return recipe
@@ -141,7 +141,7 @@ public class RecipeController {
     return ResponseEntity.created(uri).build();
   }
   /**
-   * Method to update an recipe
+   * Method to update a recipe
    *
    * @param recipeDto recipe
    * @param id recipe id
