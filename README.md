@@ -115,6 +115,10 @@ more, but I needed to finish the task for today.
 The REST endpoints for testing are being attached as a collection in the project source code directory under the name **[postman-collection](https://github.com/libu40/Recipe-Management/blob/main/postman-collection)** 
 which can exported and tested locally in the Postman client apart from Swagger OpenAPI.
 
+The database details with credentials to be connected are specified in application.properties file and the snapshot of that is from the below.
+![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Database_Status.png)
+
+
 ## **Monitoring** :
 
 **Sonarqube**:

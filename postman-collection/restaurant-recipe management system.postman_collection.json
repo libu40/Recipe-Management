@@ -85,7 +85,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Kappa\",\n    \"instruction\": \"Test\",\n    \"variant\": \"Vegetarian\",\n    \"servingCount\": \"5\",\n    \"ingredients\": [\n        {\n            \"name\": \"Masala\"\n        }\n    ]\n}\n",
+					"raw": "{\n  \"criteria\": [\n    {\n      \"key\": \"name\",\n      \"operation\": \"CN\",\n      \"value\": \"Peanut\",\n      \"dataOption\": \"ALL\"\n    }\n  ],\n  \"dataOption\": \"ALL\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -182,7 +182,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/restaurant/api/recipes/3",
+					"raw": "http://localhost:8080/restaurant/api/recipes/9",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -192,7 +192,7 @@
 						"restaurant",
 						"api",
 						"recipes",
-						"3"
+						"9"
 					]
 				}
 			},
@@ -205,7 +205,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Cashews\",\n    \"instruction\": \"Update \",\n    \"variant\": \"Vegetarian\",\n    \"servingCount\": 7,\n    \"ingredients\": [\n        {\n            \"name\": \"Test\"\n        }\n    ]\n}",
+					"raw": "{\n    \"name\": \"Cashew\",\n    \"instruction\": \"Update\",\n    \"variant\": \"Vegetarian\",\n    \"servingCount\": 7,\n    \"ingredients\": [\n        {\n            \"name\": \"Test\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
