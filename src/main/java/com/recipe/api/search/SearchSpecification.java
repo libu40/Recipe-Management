@@ -34,7 +34,7 @@ public class SearchSpecification implements Specification<Recipe> {
   public Predicate toPredicate(
       Root<Recipe> root, CriteriaQuery<?> query, @NonNull CriteriaBuilder cb) {
     Optional<RecipeSearch> operation = RecipeSearch.getOperation(criteria.getOperation());
-    String filterValue = criteria.getValue().toString().toLowerCase();
+    String filterValue = criteria.getValue().toLowerCase();
     String filterKey = criteria.getKey();
 
     Join<Object, Object> subRoot = root.join(JOINED_TABLE_NAME, JoinType.INNER);

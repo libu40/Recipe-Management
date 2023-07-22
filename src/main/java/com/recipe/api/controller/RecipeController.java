@@ -109,7 +109,8 @@ public class RecipeController {
       @RequestParam(defaultValue = "ASC") Direction sortBy,
       @RequestParam(defaultValue = "id") String attribute) {
     LOGGER.info("Fetch all the recipes with pagination enabled in a sorted way");
-    List<RecipeDto> recipes = recipeService.getSortedAndPaginatedRecipes(pageNo, pageSize, sortBy, attribute);
+    List<RecipeDto> recipes =
+        recipeService.getSortedAndPaginatedRecipes(pageNo, pageSize, sortBy, attribute);
     return ResponseEntity.ok().body(recipes);
   }
 
@@ -244,8 +245,8 @@ public class RecipeController {
   public ResponseEntity<List<RecipeDto>> getRecipesList(
       @RequestParam(defaultValue = "0") Integer pageNo,
       @RequestParam(defaultValue = "10") Integer pageSize,
-      @RequestParam(defaultValue = "id") String sortBy,
-      @Valid @RequestBody SearchRequest searchRequest) {
+      @RequestParam(defaultValue = "id") Direction sortBy,
+      @RequestBody SearchRequest searchRequest) {
     LOGGER.info("Fetch all the recipes based on the search criteria");
     List<RecipeDto> recipes = recipeService.searchRecipe(searchRequest, pageNo, pageSize, sortBy);
     return ResponseEntity.ok().body(recipes);

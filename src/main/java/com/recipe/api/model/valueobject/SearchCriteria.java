@@ -40,7 +40,7 @@ public class SearchCriteria {
   private String operation;
 
   @ApiModelProperty(notes = "The actual phrase you want to do search on", example = "Flour")
-  private Object value;
+  private String value;
 
   @ApiModelProperty(hidden = true)
   private String dataOption;
