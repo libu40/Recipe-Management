@@ -54,15 +54,7 @@ All these requirements need to be satisfied:
 1. docker rmi $(docker images -a -q)
 2. docker volume rm $(docker volume ls -q)
 
-#### **Build** :
-
-1. Open the terminal which runs on Java 17 and navigate to project root directory ****recipe-api****
-
-2. Trigger **mvn clean install** command from the source path to verify the testcases and build the
-   artifact for the
-   deployment.
-
-#### ****Deployment**** :
+#### ****Build and Deployment**** :
 
 1. Trigger **docker-compose up** to deploy the artifact for building the container along with the
    other resources
@@ -95,6 +87,12 @@ running. This can be checked by docker commands or via docker desktop dashboard.
 -----------------------------------------
 
 ## Testing  :
+
+#### **Unit and Integration tests** :
+
+1. Open the terminal which runs on Java 17 and navigate to project root directory ****recipe-api****
+
+2. Trigger **mvn test** command from the source path to verify the testcases.
 
 I've tried to make it as much production ready as I could considering the time constraints.
 For instance, I've added custom error handling mechanisms, lots of validations on top of
