@@ -205,18 +205,6 @@ integrated.
 5. Spring security for controller endpoints via Authentication and Authorization (Keycloak).
 
 
-## Comments :
-
-My thought process to build the application was to be Production ready, adhering to best practices and standards we maintain in terms of code quality and performance wise.
-I'm a big fan of TDD and follow the principles of that to build any application in the day-to-day project, But for this project I haven't picked that due to time constraints.
-My focus was mostly on monitoring and data migration apart from building the business logic as for any Production ready application monitoring should be in place before deployment.
-
-This build **IS NOT** completed yet as I need to write unit testcases, E2E Integration tests, BDD with Apache cucumber and Json data modelling tests.
-
-Please while reviewing consider this as a request as I need some more time to build this functionality.
-
-
-
 
 
 
