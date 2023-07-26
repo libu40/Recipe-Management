@@ -17,9 +17,9 @@ public class EnumValidatorConstraint implements ConstraintValidator<EnumValidato
     acceptedValues = new ArrayList<>();
     Class<? extends Enum<?>> enumClass = constraintAnnotation.enumClass();
 
-    Enum[] enumValArr = enumClass.getEnumConstants();
+    var enumValArr = enumClass.getEnumConstants();
 
-    for (Enum enumVal : enumValArr) {
+    for (var enumVal : enumValArr) {
       acceptedValues.add(enumVal.toString().toUpperCase());
     }
   }

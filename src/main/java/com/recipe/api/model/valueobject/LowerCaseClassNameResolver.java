@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 
 /**
- * This class is use to map the object and resolves the class name.
+ * This class is used to map the object and resolves the class name.
  */
 public class LowerCaseClassNameResolver extends TypeIdResolverBase {
 
