@@ -88,6 +88,14 @@ running. This can be checked by docker commands or via docker desktop dashboard.
 
 ## Testing  :
 
+### Frameworks used  :
+
+1. Unit test: Junit 5 with Mockito.
+2. API Integration test: mockMVC.
+3. BDD test: Apache cucumber with Restassured.
+4. Mock test: Wiremock.
+5. DB integration test: Testcontainers.
+
 #### **Unit and Integration tests** :
 
 1. Open the terminal which runs on Java 17 and navigate to project root directory ****recipe-api****
@@ -111,7 +119,7 @@ might have added
 more, but I needed to finish the task for today.
 
 The REST endpoints for testing are being attached as a collection in the project source code directory under the name **[postman-collection](https://github.com/libu40/Recipe-Management/blob/main/postman-collection)** 
-which can exported and tested locally in the Postman client apart from Swagger OpenAPI.
+which can be exported and tested locally in the Postman client apart from Swagger OpenAPI.
 
 The database details with credentials to be connected are specified in application.properties file and the snapshot of that is from the below.
 ![](https://github.com/libu40/Recipe-Management/blob/main/data/images/Database_Status.png)
@@ -186,10 +194,10 @@ integrated.
 4. **MapStruct**
 5. **JMX with JConsole**
 6. **HikariCP**
-7. **Unit test: Junit 5 with Mockito** :Not completed
-8. **Integration test: Apache Cucumber** :Not completed
-9. **BDD: Groovy with Apache Cucumber** :Not completed
-10. **End2End test: mockMVC with Jax-RS** :Not completed
+7. **Unit test: Junit 5 with Mockito**
+8. **Integration test: Apache Cucumber**
+9. **BDD: Groovy with Apache Cucumber**
+10. **End2End test: mockMVC with Jax-RS**
 11. **Database: MySQL**
 12. **Pagination**
 13. **Code quality: SonarQube**
@@ -203,6 +211,7 @@ integrated.
 3. CheckMarx scanning.
 4. Maven automatic dependencies update.
 5. Spring security for controller endpoints via Authentication and Authorization (Keycloak).
+6. Java21 migration.
 
 
 
